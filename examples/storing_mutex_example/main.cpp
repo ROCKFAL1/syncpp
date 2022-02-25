@@ -10,8 +10,8 @@ constexpr int THR_COUNT = 100;
 
 storing_mutex integer(1);
 
-void cout_and_inc() {
-    integer.locked([](std::optional<int>& val) { std::cout << val.value()++ << std::endl; });
+void cout_and_inc() {   
+    integer.locked([](int& val) { std::cout << val++ << std::endl; });
 }
 
 int main() {

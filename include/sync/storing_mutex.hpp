@@ -11,26 +11,24 @@ namespace sync {
     public:
 
         /**
-         * @brief Construct a new without data. If there is no content in this class,
-         * then when you try to get a value from this mutex, 
-         * you will get std::nullopt. In order to put an object, 
-         * you can use 'storing_mutex::reset()' and its overloads
+         * @brief Construct a new with storing mutex object using default T c-tor.
+         * If it is not there, then there will be a compilation error. 
          */
-        storing_mutex() = default;
+        storing_mutex() { static_assert(std::is_default_constructible_v<T>, "T should have default c-tor" ) } 
 
         /**
          * @brief Construct a new storing mutex object
          * 
          * @param data will be copied into 'storing_mutex' object
          */
-        storing_mutex(T& data) : _data(data) {} 
+        storing_mutex(const T& data) : _data(data) {} 
 
         /**
          * @brief Construct a new storing mutex object
          * 
          * @param data will be moved into 'storing_mutex' object
          */
-        storing_mutex(T&& data) : _data(data) {} 
+        storing_mutex(const T&& data) : _data(data) {} 
 
         /**
          * @brief Construct a new storing mutex object
@@ -46,50 +44,51 @@ namespace sync {
         storing_mutex& operator=(const storing_mutex&&) = delete;
 
         template<typename F>
-        std::invoke_result_t<F&&, std::optional<T>&> locked(F&& fn) {
+        std::invoke_result_t<F&&, T&> locked(F&& fn) noexcept {
             std::scoped_lock lock(_mutex);
             return std::invoke(std::forward<F>(fn), _data);
         }
 
         template<typename F>
-        std::invoke_result_t<F&&, std::optional<T>*> locked(F&& fn) {
+        std::invoke_result_t<F&&, T*> locked(F&& fn) noexcept {
             std::scoped_lock lock(_mutex);
             return std::invoke(std::forward<F>(fn), &_data);
         }
 
         template<typename F>
-        std::invoke_result_t<F&&, std::optional<T>> copied(F&& fn) const {
+        std::invoke_result_t<F&&, T> copied(F&& fn) const noexcept {
             return std::invoke(std::forward<F>(fn), _data);
         }
       
-        void reset() {
+        void reset() noexcept {
+            static_assert(std::is_default_constructible_v<T>, "T should have default c-tor" );
             std::scoped_lock lock(_mutex);
-            _data.reset();
+            _data = T();
         }
 
-        void reset(T& data) {
+        void set(const T& data) noexcept {
             std::scoped_lock lock(_mutex);
             _data = data;
         }
 
-        void reset(T&& data) {
+        void set(const T&& data) noexcept {
             std::scoped_lock lock(_mutex);
             _data = std::forward<T>(data);
         }
 
         template<typename ...Args>
-        void reset(Args&&... args) {
+        void set(const Args&&... args) noexcept {
             std::scoped_lock lock(_mutex);
             _data = T(std::forward<Args>(args)...);
         }
 
-        std::optional<T> data(){
+        T data() noexcept {          
             std::scoped_lock lock(_mutex);
             return _data;
         }
 
     private:
-        std::optional<T> _data;
+        T _data;
         std::mutex _mutex;
     };
 
