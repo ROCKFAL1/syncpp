@@ -2,7 +2,6 @@
 
 #include <mutex>
 #include <type_traits>
-#include <optional>
 
 namespace sync {
 
@@ -14,7 +13,7 @@ namespace sync {
          * @brief Construct a new with storing mutex object using default T c-tor.
          * If it is not there, then there will be a compilation error. 
          */
-        storing_mutex() { static_assert(std::is_default_constructible_v<T>, "T should have default c-tor" ) } 
+        storing_mutex() { static_assert(std::is_default_constructible_v<T>, "T should have default c-tor" ); } 
 
         /**
          * @brief Construct a new storing mutex object
@@ -58,28 +57,6 @@ namespace sync {
         template<typename F>
         std::invoke_result_t<F&&, T> copied(F&& fn) const noexcept {
             return std::invoke(std::forward<F>(fn), _data);
-        }
-      
-        void reset() noexcept {
-            static_assert(std::is_default_constructible_v<T>, "T should have default c-tor" );
-            std::scoped_lock lock(_mutex);
-            _data = T();
-        }
-
-        void set(const T& data) noexcept {
-            std::scoped_lock lock(_mutex);
-            _data = data;
-        }
-
-        void set(const T&& data) noexcept {
-            std::scoped_lock lock(_mutex);
-            _data = std::forward<T>(data);
-        }
-
-        template<typename ...Args>
-        void set(const Args&&... args) noexcept {
-            std::scoped_lock lock(_mutex);
-            _data = T(std::forward<Args>(args)...);
         }
 
         T data() noexcept {          
