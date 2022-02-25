@@ -69,4 +69,4 @@ namespace sync {
         std::mutex _mutex;
     };
 
-} //namespace Sync
+} //namespace sync
