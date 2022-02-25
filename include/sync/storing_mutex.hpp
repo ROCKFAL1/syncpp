@@ -83,7 +83,7 @@ namespace sync {
             _data = T(std::forward<Args>(args)...);
         }
 
-        const std::optional<T>& data() {
+        std::optional<T> data(){
             std::scoped_lock lock(_mutex);
             return _data;
         }
