@@ -1,1 +1,1 @@
-# SyncCpp
+# syncpp
