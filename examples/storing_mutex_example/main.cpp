@@ -2,7 +2,7 @@
 #include <thread>
 #include <vector>
 
-#include <sync/storing_mutex.hpp>
+#include <syncpp/storing_mutex.hpp>
 
 using namespace sync;
 

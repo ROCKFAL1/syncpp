@@ -3,7 +3,7 @@
 #include <mutex>
 #include <type_traits>
 
-namespace sync {
+namespace syncpp {
 
     template<typename T>
     class storing_mutex final {
@@ -69,4 +69,4 @@ namespace sync {
         std::mutex _mutex;
     };
 
-} //namespace sync
+} //namespace syncpp
