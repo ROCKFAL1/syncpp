@@ -35,7 +35,7 @@ namespace syncpp {
          * @tparam Args is arguments for constructing an object of type 'T'
          */
         template<typename ...Args>
-        storing_mutex(Args&&... args) : _data(T(std::forward<Args>(args)...)) {}
+        storing_mutex(const Args&&... args) : _data(T(std::forward<Args>(args)...)) {}
 
         storing_mutex(const storing_mutex&) = delete;
         storing_mutex& operator=(const storing_mutex&) = delete;
