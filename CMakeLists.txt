@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 file(GLOB src 
-"include/sync/*.hpp"
+"include/syncpp/*.hpp"
 )
 
 add_library(syncpp STATIC ${src})
