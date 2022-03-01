@@ -13,21 +13,21 @@ namespace syncpp {
          * @brief Construct a new with storing mutex object using default T c-tor.
          * If it is not there, then there will be a compilation error. 
          */
-        storing_mutex() { static_assert(std::is_default_constructible_v<T>, "T should have default c-tor" ); } 
+        storing_mutex() noexcept { static_assert(std::is_default_constructible_v<T>, "T should have default c-tor" ); } 
 
         /**
          * @brief Construct a new storing mutex object
          * 
          * @param data will be copied into 'storing_mutex' object
          */
-        storing_mutex(const T& data) : _data(data) {} 
+        storing_mutex(const T& data) noexcept : _data(data) {} 
 
         /**
          * @brief Construct a new storing mutex object
          * 
          * @param data will be moved into 'storing_mutex' object
          */
-        storing_mutex(const T&& data) : _data(data) {} 
+        storing_mutex(const T&& data) noexcept : _data(data) {} 
 
         /**
          * @brief Construct a new storing mutex object
@@ -35,7 +35,7 @@ namespace syncpp {
          * @tparam Args is arguments for constructing an object of type 'T'
          */
         template<typename ...Args>
-        storing_mutex(const Args&&... args) : _data(T(std::forward<Args>(args)...)) {}
+        storing_mutex(const Args&&... args) noexcept : _data(T(std::forward<Args>(args)...)) {}
 
         storing_mutex(const storing_mutex&) = delete;
         storing_mutex& operator=(const storing_mutex&) = delete;
