@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 file(GLOB src 
 "include/syncpp/*.hpp"
+"include/syncpp/private/*.hpp"
 )
 
 add_library(syncpp STATIC ${src})
