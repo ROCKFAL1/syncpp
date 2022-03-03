@@ -1,6 +1,7 @@
 #pragma once
 #include <shared_mutex>
 #include <functional>
+#include <type_traits>
 
 #include "private/scoped_action.hpp"
 
@@ -36,9 +37,15 @@ public:
         return std::invoke(std::forward<F>(fn), _data);   
     } 
 
+    T data() noexcept {
+        shared_mutex.lock();
+        priv::scoped_action<std::shared_mutex> on_exit(shared_mutex, [](std::shared_mutex& sm) { sm.unlock(); });   
+        return _data;
+    }
+
 private:
     T _data;
-    std::shared_mutex shared_mutex;
+    std::shared_mutex _shared_mutex;
 };
 
 } //namespace syncpp
