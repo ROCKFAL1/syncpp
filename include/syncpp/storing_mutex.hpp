@@ -55,8 +55,15 @@ public:
     }
 
     template<typename F>
-    std::invoke_result_t<F&&, T> copied(F&& fn) const noexcept {
-        return std::invoke(std::forward<F>(fn), _data);
+    std::invoke_result_t<F&&, T> copied(F&& fn) noexcept {
+        static_assert(std::is_copy_constructible_v<T>, "T should have copy c-tor");
+        T local_data;
+        {
+            std::scoped_lock lock(_mutex);
+            local_data = _data;
+        }
+         
+        return std::invoke(std::forward<F>(fn), std::move(local_data));
     }
 
     T data() noexcept {          
