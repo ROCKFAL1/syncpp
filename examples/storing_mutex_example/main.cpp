@@ -4,7 +4,7 @@
 
 #include <syncpp/storing_mutex.hpp>
 
-using namespace sync;
+using namespace syncpp;
 
 constexpr int THR_COUNT = 100;
 
