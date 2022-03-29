@@ -25,21 +25,18 @@ public:
 
     template<typename F>
     std::invoke_result_t<F&&, const T&> read(F&& fn) noexcept {
-        shared_mutex.lock_shared();
-        priv::scoped_action<std::shared_mutex> on_exit(shared_mutex, [](std::shared_mutex& sm) { sm.unlock_shared(); });         
+        std::shared_lock sl(_shared_mutex);
         return std::invoke(std::forward<F>(fn), _data);         
     } 
 
     template<typename F>
     std::invoke_result_t<F&&, T&> write(F&& fn) noexcept {
-        shared_mutex.lock();
-        priv::scoped_action<std::shared_mutex> on_exit(shared_mutex, [](std::shared_mutex& sm) { sm.unlock(); });         
+        std::scoped_lock sl(_shared_mutex); 
         return std::invoke(std::forward<F>(fn), _data);   
     } 
 
     T data() noexcept {
-        shared_mutex.lock();
-        priv::scoped_action<std::shared_mutex> on_exit(shared_mutex, [](std::shared_mutex& sm) { sm.unlock(); });   
+        std::scoped_lock sl(_shared_mutex);
         return _data;
     }
 
