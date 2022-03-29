@@ -3,8 +3,6 @@
 #include <functional>
 #include <type_traits>
 
-#include "private/scoped_action.hpp"
-
 namespace syncpp {
 
 template<typename T> 
