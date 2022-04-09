@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(example VERSION 0.1.0)
+project(rw_lock_example)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_executable(rw_lock_example "main.cpp")
 
-add_executable(example "main.cpp")
-target_include_directories(example PRIVATE "../../include")
+add_subdirectory("../../" "rw_lock_example" EXCLUDE_FROM_ALL)
+target_include_directories(rw_lock_example PRIVATE ${SYNCPP_INCLUDE_DIRS})
+
+set_target_properties(rw_lock_example PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
+    LINKER_LANGUAGE CXX
+)
