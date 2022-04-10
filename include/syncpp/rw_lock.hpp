@@ -9,7 +9,7 @@ template<typename T>
 class rw_lock final {
 public:
 
-    rw_lock() noexcept { static_assert(std::is_default_constructible_v<T>, "T should have default c-tor" ); }
+    rw_lock() noexcept = default;
     rw_lock(const T& data) noexcept : _data(data) {} 
     rw_lock(const T&& data) noexcept : _data(data) {} 
 

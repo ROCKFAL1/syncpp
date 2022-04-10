@@ -13,7 +13,7 @@ public:
      * @brief Construct a new with storing mutex object using default T c-tor.
      * If it is not there, then there will be a compilation error. 
      */
-    storing_mutex() noexcept { static_assert(std::is_default_constructible_v<T>, "T should have default c-tor" ); } 
+    storing_mutex() noexcept = default;
 
     /**
      * @brief Construct a new storing mutex object
@@ -56,7 +56,6 @@ public:
 
     template<typename F>
     std::invoke_result_t<F&&, T> copied(F&& fn) noexcept {
-        static_assert(std::is_copy_constructible_v<T>, "T should have copy c-tor");
         T local_data;
         {
             std::scoped_lock lock(_mutex);
