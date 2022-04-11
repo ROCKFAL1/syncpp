@@ -53,14 +53,14 @@ private:
 
 namespace std {
 
-    template<typename T>
-    struct tuple_size<::syncpp::rw_lock<T>>
-        : integral_constant<std::size_t, 2> {};
+template<typename T>
+struct tuple_size<::syncpp::rw_lock<T>>
+    : integral_constant<std::size_t, 2> {};
 
-    template<typename T>
-    struct tuple_element<0, ::syncpp::rw_lock<T>> { using type = T&; };
+template<typename T>
+struct tuple_element<0, ::syncpp::rw_lock<T>> { using type = T&; };
 
-    template<typename T>
-    struct tuple_element<1, ::syncpp::rw_lock<T>> { using type = std::shared_mutex&; };
+template<typename T>
+struct tuple_element<1, ::syncpp::rw_lock<T>> { using type = std::shared_mutex&; };
     
 } //namespace std

@@ -87,15 +87,15 @@ private:
 
 namespace std {
 
-    template<typename T>
-    struct tuple_size<::syncpp::storing_mutex<T>>
-        : integral_constant<std::size_t, 2> {};
+template<typename T>
+struct tuple_size<::syncpp::storing_mutex<T>>
+    : integral_constant<std::size_t, 2> {};
 
-    template<typename T>
-    struct tuple_element<0, ::syncpp::storing_mutex<T>> { using type = T&; };
+template<typename T>
+struct tuple_element<0, ::syncpp::storing_mutex<T>> { using type = T&; };
 
-    template<typename T>
-    struct tuple_element<1, ::syncpp::storing_mutex<T>> { using type = std::mutex&; };
+template<typename T>
+struct tuple_element<1, ::syncpp::storing_mutex<T>> { using type = std::mutex&; };
     
 } //namespace std
 
