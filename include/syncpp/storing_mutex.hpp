@@ -2,6 +2,8 @@
 
 #include <mutex>
 #include <type_traits>
+#include <utility>
+#include <tuple>
 
 namespace syncpp {
 
@@ -70,9 +72,31 @@ public:
         return _data;
     }
 
+    template<size_t N>
+    std::tuple_element_t<N, storing_mutex<T>>& get() {
+        if      constexpr (N == 0) return _data;
+        else if constexpr (N == 1) return _mutex;
+    }
+
 private:
-    T _data;
+    T          _data;
     std::mutex _mutex;
 };
 
 } //namespace syncpp
+
+namespace std {
+
+    template<typename T>
+    struct tuple_size<::syncpp::storing_mutex<T>>
+        : integral_constant<std::size_t, 2> {};
+
+    template<typename T>
+    struct tuple_element<0, ::syncpp::storing_mutex<T>> { using type = T&; };
+
+    template<typename T>
+    struct tuple_element<1, ::syncpp::storing_mutex<T>> { using type = std::mutex&; };
+    
+} //namespace std
+
+
