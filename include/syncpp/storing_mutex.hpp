@@ -10,6 +10,11 @@ namespace syncpp {
 template<typename T>
 class storing_mutex final {
 public:
+    using value_type      = T;
+    using reference       = T&;  
+    using pointer         = T*;
+    using const_reference = typename const reference;
+    using const_pointer   = typename const pointer;
 
     /**
      * @brief Construct a new with storing mutex object using default T c-tor.

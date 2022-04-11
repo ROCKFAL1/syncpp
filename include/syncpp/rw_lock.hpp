@@ -8,6 +8,11 @@ namespace syncpp {
 template<typename T> 
 class rw_lock final {
 public:
+    using value_type      = T;
+    using reference       = T&;  
+    using pointer         = T*;
+    using const_reference = typename const reference;
+    using const_pointer   = typename const pointer;
 
     rw_lock() noexcept = default;
     rw_lock(const T& data) noexcept : _data(data) {} 
