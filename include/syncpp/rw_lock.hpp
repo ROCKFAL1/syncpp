@@ -38,9 +38,29 @@ public:
         return _data;
     }
 
+    template<size_t N>
+    std::tuple_element_t<N, rw_lock<T>>& get() {
+        if      constexpr (N == 0) return _data;
+        else if constexpr (N == 1) return _shared_mutex;
+    }
+
 private:
-    T _data;
+    T                 _data;
     std::shared_mutex _shared_mutex;
 };
 
 } //namespace syncpp
+
+namespace std {
+
+    template<typename T>
+    struct tuple_size<::syncpp::rw_lock<T>>
+        : integral_constant<std::size_t, 2> {};
+
+    template<typename T>
+    struct tuple_element<0, ::syncpp::rw_lock<T>> { using type = T&; };
+
+    template<typename T>
+    struct tuple_element<1, ::syncpp::rw_lock<T>> { using type = std::shared_mutex&; };
+    
+} //namespace std
