@@ -4,6 +4,7 @@ project(syncpp)
 set(SYNCPP_SOURCES
     "include/syncpp/rw_lock.hpp"
     "include/syncpp/storing_mutex.hpp"
+    "include/syncpp/channel.hpp"
 )
 
 set(SYNCPP_INCLUDE_DIRS
