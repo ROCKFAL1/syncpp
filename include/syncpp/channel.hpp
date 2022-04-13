@@ -57,7 +57,7 @@ template<typename T,
     size_t BufferSize = std::numeric_limits<size_t>::max(),
     typename Container = std::queue<T>>
 class channel
-    : public priv::basic_channel<T, channel<T, BufferSize>> {
+    : public priv::basic_channel<T, channel<T, BufferSize, Container>> {
 
 public:
     using value_type      = T;
@@ -144,7 +144,7 @@ private:
     std::condition_variable _cv;
     mutable std::mutex      _mutex;
     
-    friend class priv::basic_channel<T, channel<T, BufferSize>>;
+    friend class priv::basic_channel<T, channel<T, BufferSize, Container>>;
 
 }; //class channel
 
