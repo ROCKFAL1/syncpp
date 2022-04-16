@@ -92,8 +92,7 @@ private:
     void waiting_push_impl(const_reference value) noexcept {
         details::scope_action _([&] { _cv.notify_one(); });  
         std::unique_lock ul(_mutex);
-        if(size_not_safe() >= buffer_max_size()) 
-            _cv.wait(ul, [&] { return size_not_safe() < buffer_max_size(); });
+        while(size_not_safe() >= buffer_max_size()) _cv.wait(ul);
         
         _container.push(value);     
         // Because of details::scope_action and std::unique_lock, after return we get something like:
@@ -116,8 +115,7 @@ private:
     value_type waiting_pop_impl() noexcept {       
         details::scope_action _([&] { _cv.notify_one(); });   
         std::unique_lock ul(_mutex);              
-        if(size_not_safe() == 0) 
-            _cv.wait(ul, [&] { return size_not_safe() > 0; });
+        while(size_not_safe() == 0) _cv.wait(ul);
         
         details::scope_action pop_on_exit([&] { _container.pop(); });
         return _container.front();
@@ -172,8 +170,7 @@ private:
     void waiting_push_impl(const_reference value) noexcept {
         details::scope_action _([&] { _cv.notify_one(); });  
         std::unique_lock ul(_mutex);
-        if(!is_empty_not_safe()) 
-            _cv.wait(ul, [&] { return is_empty_not_safe(); });
+        while(!is_empty_not_safe()) _cv.wait(ul);
         
         _value = value;    
         // Because of details::scope_action and std::unique_lock, after return we get something like:
@@ -197,8 +194,7 @@ private:
         details::scope_action _([&] { _cv.notify_one(); });   
         std::unique_lock ul(_mutex);      
         details::scope_action reset([&] { _value.reset(); });          
-        if(is_empty_not_safe()) 
-            _cv.wait(ul, [&] { return !is_empty_not_safe(); });
+        while(is_empty_not_safe()) _cv.wait(ul);
         
         return _value.value();
         // Because of details::scope_action and std::unique_lock, after return we get something like:
